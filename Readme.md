@@ -1,3 +1,5 @@
+[Задание по BuildShip](https://youtu.be/HsBWCImuR9k?si=sTVe6Dnq77W46qQG)
+
 -- Запрос 1: Получить список юзернеймов пользователей\
 SELECT username FROM users;
 
