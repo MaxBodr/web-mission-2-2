@@ -1,25 +1,26 @@
-# Mission 2 
+-- Запрос 1: Получить список юзернеймов пользователей
+SELECT username FROM users;
 
-## Part 0
+-- Запрос 2: Получить количество отправленных сообщений каждым пользователем
+SELECT u.username, COUNT(m.id) AS sent_messages
+FROM users u
+JOIN messages m ON u.id = m.from
+GROUP BY u.username;
 
-[Ссылка на видео появилась](https://youtu.be/Kti4MQGnMz4)
+-- Запрос 3: Получить пользователя с самым большим количеством полученных сообщений и само количество
+SELECT u.username, COUNT(m.id) AS received_messages
+FROM users u
+JOIN messages m ON u.id = m.to
+GROUP BY u.username
+ORDER BY received_messages DESC
+LIMIT 1;
 
-## Part 1
-
-- **Вопрос 1**
- SSH используется для защищенного удаленного управления системами или передачи файлов шифруя трафик
-
-- **Вопрос 2**
- Публичный ключ надо положить в файл ".ssh/authotized_keys" на сервере
-
-- **Вопрос 3**
- Long polling - Клиент отправляет запрос и ждет пока сервер не отправит данные. Запрос держится открытым до получения данных \
-Webhooks - Сервер сам отправляет данные клиенту, когда происходит действие, по предварительному указанному клинтом адресу
-
-- **Вопрос 4**
- Используется для отслеживания задач, обратной связи, идей или ошибок в рамках проекта. \
-[Пример issues для Micorsoft TypeScript](https://github.com/microsoft/TypeScript/issues/43435)
-
-
-- **Вопрос 5**
- Можно использовать заглушку в виде ".gitkeep"
+-- Запрос 4: Получить среднее количество сообщений, отправленное каждым пользователем
+SELECT u.username, AVG(sent_messages.count) AS average_sent_messages
+FROM (
+    SELECT from AS user_id, COUNT(*) AS count
+    FROM messages
+    GROUP BY from
+) sent_messages
+JOIN users u ON u.id = sent_messages.user_id
+GROUP BY u.username;
